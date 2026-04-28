@@ -33,6 +33,7 @@ src/
 - **Data Fetching:** Axios, `@tanstack/react-query`
 - **Routing:** React Router v7
 - **UI & Icons:** `lucide-react`
+- **Error Handling:** `react-error-boundary` (Ngăn chặn sập giao diện toàn cục)
 - **Formatting:** Prettier, ESLint
 - **Git Hooks:** Husky, lint-staged
 
@@ -48,11 +49,29 @@ npm install
 Dự án đã được tích hợp bộ lọc trước khi commit (pre-commit hook) bằng Husky và lint-staged. Mỗi khi một thành viên gõ lệnh `git commit`, hệ thống sẽ tự động chạy ESLint và Prettier để sửa lỗi và làm đẹp code.
 Lệnh `npm install` ở trên sẽ tự động kích hoạt script `"prepare": "husky"` trong `package.json`, qua đó tự động cài đặt các Git Hooks vào máy của lập trình viên mới mà không cần bất kỳ thao tác cấu hình thủ công nào. Code rác sẽ bị chặn lại và không thể bị đẩy lên Git.
 
-**Lưu ý khi đổi kho lưu trữ (Change Git Remote):**
-Nếu bạn muốn dùng source này cho một dự án hoàn toàn khác và cần trỏ sang một Github Repository mới, bạn chỉ cần gõ lệnh:
+**Lưu ý khi tạo dự án mới từ Base Source này:**
+Vì đây là một Base Source, bạn sẽ dùng nó làm móng cho nhiều dự án. Có 2 cách cơ bản:
+
+_Cách 1: Giữ nguyên lịch sử commit cũ (Dùng `git remote set-url`)_
 
 ```bash
 git remote set-url origin <URL_CỦA_REPO_MỚI>
+git push -u origin main
 ```
 
-Toàn bộ code và cấu hình Husky (Git hooks) sẽ **giữ nguyên và tiếp tục hoạt động bình thường** vì cấu hình đã nằm sẵn trong thư mục cục bộ của bạn.
+Toàn bộ code, cấu hình Husky và lịch sử commit sẽ tiếp tục hoạt động.
+
+_Cách 2: Làm sạch hoàn toàn lịch sử (Dự án trắng tinh - Khuyên dùng)_
+
+1. Xóa thư mục ẩn `.git` trên máy tính (`rm -rf .git`).
+2. Khởi tạo lại:
+
+```bash
+git init
+git add .
+git commit -m "Initial commit from base source"
+git remote add origin <URL_CỦA_REPO_MỚI>
+git push -u origin main
+```
+
+_Lưu ý: Ở cách 2, sau khi tạo Git mới, bạn chỉ cần gõ lại lệnh `npm install`, Husky sẽ tự động kết nối lại các Git Hooks bảo vệ cho bạn._
